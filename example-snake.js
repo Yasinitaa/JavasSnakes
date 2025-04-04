@@ -19,14 +19,15 @@ let score = 0;
 let highscore = 0;
 let gameOver = false;
 // - Snelheid van de slang.
-const snakeSpeed = 250;
+const initialSnakeSpeed = 250;
+let snakeSpeed = initialSnakeSpeed;
 let gameInterval;
 
 // Tel hoeveel voedsel de slang heeft gegeten
 let foodEaten = 0;
 
-// Variabelen voor het obstakel
-let obstacle = null;
+// Variabelen voor de obstakels
+let obstacles = [];  // Nu een array om meerdere obstakels bij te houden
 
 // Functie om een rechthoek te tekenen (gebruikt voor de slang en het voedsel)
 function drawRect(x, y, color) {
@@ -54,13 +55,23 @@ function drawSnake() {
     });
 }
 
-// Functie om het voedsel als een cirkel te tekenen
+// Aangepaste functie om een kleine appel te tekenen
 function drawFood() {
+    // Hier teken ik een eenvoudige appel als een klein symbool
+    // We maken een klein vierkant voor de appel
     ctx.beginPath();
-    ctx.arc(food.x + gridSize / 2, food.y + gridSize / 2, gridSize / 2, 0, Math.PI * 2); // Cirkels voor de appel
+    ctx.arc(food.x + gridSize / 2, food.y + gridSize / 2, gridSize / 3, 0, Math.PI * 2);
     ctx.fillStyle = "red";
     ctx.fill();
     ctx.strokeStyle = "black";
+    ctx.lineWidth = 2;
+    ctx.stroke();
+
+    // Teken de steel van de appel (kleine lijn boven de appel)
+    ctx.beginPath();
+    ctx.moveTo(food.x + gridSize / 2, food.y + gridSize / 3);
+    ctx.lineTo(food.x + gridSize / 2, food.y - gridSize / 3);
+    ctx.strokeStyle = "brown";
     ctx.lineWidth = 2;
     ctx.stroke();
 }
@@ -90,10 +101,10 @@ function drawGame() {
     // Teken het voedsel
     drawFood();
 
-    // Teken het obstakel
-    if (obstacle) {
+    // Teken alle obstakels (behouden)
+    obstacles.forEach(obstacle => {
         obstacle.forEach(block => drawRect(block.x, block.y, "blue"));
-    }
+    });
 
     // Update de score en highscore in de HTML
     document.getElementById('score').textContent = score;
@@ -116,7 +127,7 @@ function moveSnake() {
     // Controleer of de slang tegen de muur botst, zichzelf raakt of tegen het obstakel botst
     if (head.x < 0 || head.x >= canvas.width || head.y < 0 || head.y >= canvas.height ||
         snake.some((seg, index) => index !== 0 && seg.x === head.x && seg.y === head.y) ||
-        (obstacle && obstacle.some(block => block.x === head.x && block.y === head.y))) {
+        obstacles.some(obstacle => obstacle.some(block => block.x === head.x && block.y === head.y))) {
         endGame();  // Stop het spel als er een botsing is
         return;
     }
@@ -128,9 +139,20 @@ function moveSnake() {
         foodEaten++;  // Verhoog het aantal gegeten voedsel
         food = getRandomFoodPosition();  // Genereer nieuw voedsel
 
+
+        // Elke 3 gegeten voedsel, verhoog de snelheid
+        if (foodEaten % 3 === 0) {
+            snakeSpeed = Math.max(50, snakeSpeed - 20);  // Verhoog de snelheid, maar niet minder dan 50 ms per interval
+            clearInterval(gameInterval);  // Stop het huidige interval
+            gameInterval = setInterval(() => {  // Start een nieuw interval met de verhoogde snelheid
+                moveSnake();
+                drawGame();
+            }, snakeSpeed);
+        }
+
         // Elke 6 gegeten voedsel, voeg een obstakel toe
         if (foodEaten % 6 === 0) {
-            obstacle = getRandomObstaclePosition();  // Genereer een obstakel
+            obstacles.push(getRandomObstaclePosition());  // Voeg een nieuw obstakel toe aan de lijst
         }
     } else {
         snake.pop();  // Verwijder het laatste segment als er geen voedsel is gegeten
@@ -200,7 +222,7 @@ function startGame() {
     gameOver = false;  // Zet game over naar false
     snake = [{ x: 200, y: 200 }];  // Reset de slang naar de beginpositie
     food = getRandomFoodPosition();  // Genereer nieuw voedsel
-    obstacle = null;  // Reset het obstakel
+    obstacles = [];  // Reset de obstakels lijst
     direction = "RIGHT";  // Zet de beginrichting van de slang
     score = 0;  // Reset de score
     foodEaten = 0;  // Reset het aantal gegeten voedsel
