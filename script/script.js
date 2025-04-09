@@ -256,14 +256,20 @@ function moveSnake() {
 let hitObstacle = obstacles.some(obstacle => obstacle.some(block => block.x === head.x && block.y === head.y));
     
     // Controleer of de slang tegen de muur botst, zichzelf raakt of tegen het obstakel botst
-    if (!isInvincible && (
-        head.x < 0 || head.x >= canvas.width ||
-        head.y < 0 || head.y >= canvas.height ||
-        hitSelf || hitObstacle
-    )) {
-        endGame();
-        return;
-    }
+if (
+    head.x < 0 || head.x >= canvas.width ||
+    head.y < 0 || head.y >= canvas.height
+) {
+    endGame();
+    return;
+}
+
+// Alleen controleren op obstakels en jezelf als je NIET onsterfelijk bent
+if (!isInvincible && (hitSelf || hitObstacle)) {
+    endGame();
+    return;
+}
+
     
     snake.unshift(head);  // Voeg een nieuwe kop toe aan de slang
     // Controleer of de slang het voedsel heeft gegeten
