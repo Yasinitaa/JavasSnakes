@@ -389,10 +389,10 @@ function startGame() {
     direction = "RIGHT";
     score = 0;
     foodEaten = 0;
-    snakeSpeed = initialSnakeSpeed; // <== FIX: snelheid resetten
+    snakeSpeed = initialSnakeSpeed; // bug snelheid resetten
 
 
-    // Stel een interval in om de slang te bewegen en het spel te tekenen
+    // stel een interval in om de slang te bewegen en het spel te tekenen
     gameInterval = setInterval(() => {
         moveSnake();
         drawGame();
