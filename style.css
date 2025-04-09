@@ -1,0 +1,120 @@
+/* Zorg dat het pixel-art lettertype wordt ingeladen via Google Fonts in je HTML-head */
+@import url('https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap');
+
+/* Algemene stijlen voor de body */
+body {
+    display: flex; /* Zorgt ervoor dat de inhoud gecentreerd wordt met Flexbox */
+    flex-direction: column; /* Stapelt elementen verticaal */
+    align-items: center; /* Centreert de inhoud horizontaal */
+    justify-content: center; /* Centreert de inhoud verticaal */
+    height: 100vh; /* Maakt de body zo groot als het volledige scherm */
+    background: url('pixel.webp') no-repeat center center fixed; /* Achtergrondafbeelding met neon-thema */
+    background-size: cover; /* Zorgt ervoor dat de afbeelding het hele scherm bedekt */
+    color: white; /* Witte tekstkleur voor betere leesbaarheid */
+    font-family: 'Press Start 2P', cursive; /* Retro-pixellettertype */
+    margin: 0; /* Verwijdert standaardmarges */
+    /* Zet font-smoothing uit voor een meer pixelachtig effect */
+    -webkit-font-smoothing: none;
+    -moz-osx-font-smoothing: grayscale;
+    text-rendering: optimizeSpeed;
+}
+
+/* Stijl voor het canvas (speelveld) */
+canvas {
+    background-color: black; /* Zorgt ervoor dat het speelveld altijd een zwarte achtergrond heeft */
+    border: 2px solid white; /* Witte rand om het speelveld zichtbaar te maken */
+    image-rendering: pixelated; /* Zorgt voor een pixelachtige uitstraling van afbeeldingen */
+    image-rendering: -moz-crisp-edges;
+    image-rendering: -webkit-optimize-contrast;
+}
+
+/* Retro-stijl voor knoppen */
+button {
+    margin-top: 10px; /* Ruimte boven de knop */
+    padding: 12px 24px; /* Binnenruimte voor een grotere klikbare oppervlakte */
+    font-size: 18px; /* Tekstgrootte */
+    background-color: #ff0000; /* Rode achtergrondkleur */
+    color: white; /* Witte tekstkleur */
+    border: 2px solid white; /* Witte rand */
+    cursor: pointer; /* Cursor verandert naar een handje bij hover */
+    text-transform: uppercase; /* Zet de tekst in hoofdletters */
+    letter-spacing: 2px; /* Extra ruimte tussen letters voor een retro-look */
+    -webkit-font-smoothing: none;
+    -moz-osx-font-smoothing: grayscale;
+    text-rendering: optimizeSpeed;
+}
+
+/* stijl voor teksten zoals paragrafen en koppen */
+p, h1 {
+    font-size: 20px; /* tekstgrootte */
+    margin: 0; /* verwijdert standaardmarges */
+    padding: 0; /* verwijdert standaardopvulling */
+    text-align: center; /*centreert de tekst */
+    -webkit-font-smoothing: none;
+    -moz-osx-font-smoothing: grayscale;
+    text-rendering: optimizeSpeed;
+}
+
+/* Stijl voor de herstartknop */
+#restartButton {
+    margin-top: 20px; /* extra ruimte boven de knop */
+    padding: 15px 30px; /* grotere knop voor betere interactie */
+    font-size: 16px; /* tekstgrootte *
+    font-family: 'Press Start 2P', cursive; /* pixel-art lettertype */
+    color: white; /* witte tekst */
+    background: #ff0000; /* rode achtergrond */
+    border: 4px solid white; /* witte rand */
+    cursor: pointer; /* verandert cursor naar een handje */
+    text-transform: uppercase; /* tekst in hoofdletters */
+    letter-spacing: 2px; /* extra ruimte tussen letters */
+    image-rendering: pixelated; /* zorgt voor een pixelachtig effect */
+    box-shadow: 6px 6px 0px black; /* geeft de knop een schaduw */
+    position: relative; /* nodig voor pseudo-elementen */
+    transition: all 0.1s ease-in-out; /* gladde overgangseffecten */
+}
+
+/* extra effect voor de herstartknop */
+#restartButton::before {
+    content: ''; /* voegt een extra laag toe voor een glitch effect */
+    position: absolute;
+    top: -6px;
+    left: -6px;
+    width: 100%;
+    height: 100%;
+    background: repeating-linear-gradient(
+        45deg,
+        rgba(255, 255, 255, 0.2) 0px,
+        rgba(255, 255, 255, 0.2) 4px,
+        transparent 4px,
+        transparent 8px
+    );
+    opacity: 0.5;
+    z-index: -1;
+}
+
+/* hover effect voor de herstartknop */
+#restartButton:hover {
+    background-color: darkred; /* donkerdere kleur bij hover */
+    box-shadow: 4px 4px 0px black; /* kleinere schaduw */
+}
+
+/* actieve stijl wanneer de knop wordt ingedrukt */
+#restartButton:active {
+    box-shadow: none; /* Verwijdert de schaduw */
+    transform: translate(4px, 4px); /* Laat de knop "indrukken" */
+}
+
+/* glitch animatie voor een retro stijl effect */
+@keyframes glitch {
+    0% { transform: translate(0, 0); }
+    20% { transform: translate(-2px, 2px); }
+    40% { transform: translate(2px, -2px); }
+    60% { transform: translate(-1px, 1px); }
+    80% { transform: translate(1px, -1px); }
+    100% { transform: translate(0, 0); }
+}
+
+/* glitch effect bij hover toevoegen */
+#restartButton:hover {
+    animation: glitch 0.2s infinite;
+}
